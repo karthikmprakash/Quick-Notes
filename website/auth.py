@@ -53,14 +53,12 @@ def sign_up():
             flash('Passsword is too short, it must be atleast seven characters',category='error')
         else:
             new_user=User(email=email,first_name=firstName,password=generate_password_hash(password1,method='sha256'))
-            try:
-                db.session.add(new_user)
-                db.session.commit()
-                login_user(user,remember=True)
-            except IntegrityError:
-                db.session.rollback()
-
+            db.session.add(new_user)
+            db.session.commit()
+            login_user(new_user,remember=True)
             flash('Account created!',category='success')
             return redirect(url_for('views.home'))
+
+           
 
     return render_template("sign_up.html",user=current_user)
